@@ -1,6 +1,8 @@
 # NexusAdmin
 
 A lightweight, modular administration framework for Garry's Mod.
+This addon has been written in combination with Claude Sonnet 4.6.
+The Ideas are written by me and Claude executes them.
 
 ## Features
 
