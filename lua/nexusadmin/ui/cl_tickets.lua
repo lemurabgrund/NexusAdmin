@@ -156,13 +156,13 @@ hook.Add("HUDPaint", "NexusAdmin_TicketHUD", function()
     local label = t and string.format("TICKET #%d", t.id) or "TICKET"
     local sub   = t and ("Status: " .. t.status:upper()) or ""
 
-    draw.SimpleText(label, "NA_SB_Sub",
-        x + 14, y + 12, Color(0, 210, 255, a),
+    draw.SimpleText(label, "NA_Font_NSmall",
+        x + 14, y + 10, Color(0, 210, 255, a),
         TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-    draw.SimpleText(sub, "NA_SB_Sub",
+    draw.SimpleText(sub, "NA_Font_NSmall",
         x + 14, y + 28, statusCol,
         TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-    draw.SimpleText("Klicken zum Öffnen", "NA_SB_Sub",
+    draw.SimpleText("Öffnen →", "NA_Font_NSmall",
         x + HUD_W - 10, y + HUD_H * 0.5,
         Color(50, 70, 90, a), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 end)
@@ -250,13 +250,13 @@ function NexusAdmin.OpenTicketChat(ticket)
 
         draw.SimpleText(
             string.format("TICKET #%d  –  %s", ticket.id, ticket.authorName),
-            T.Fonts.Title, 16, h * 0.5 - 9,
+            T.Fonts.Large, 16, h * 0.5 - 10,
             Color(0, 210, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
         draw.SimpleText(
             "Status: " .. st:upper(),
-            T.Fonts.Small, 16, h * 0.5 + 11,
+            T.Fonts.Nexus_Small, 16, h * 0.5 + 14,
             statusCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-        draw.SimpleText("✕", T.Fonts.Body,
+        draw.SimpleText("✕", T.Fonts.Medium,
             w - 20, h * 0.5, Color(80, 100, 130),
             TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         surface.SetDrawColor(0, 210, 255, 20)
@@ -290,7 +290,7 @@ function NexusAdmin.OpenTicketChat(ticket)
                     Color(col.r, col.g, col.b, math.floor(Lerp(self._hv, 35, 75))))
                 T.DrawBorder(0, 0, w, h,
                     Color(col.r, col.g, col.b, math.floor(Lerp(self._hv, 55, 130))), 8)
-                draw.SimpleText(label, T.Fonts.Small, w * 0.5, h * 0.5, col,
+                draw.SimpleText(label, T.Fonts.Nexus_Small, w * 0.5, h * 0.5, col,
                     TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
             end
             btn.DoClick = onclick
@@ -370,8 +370,8 @@ function NexusAdmin.OpenTicketChat(ticket)
         local BMAX      = W - 100
         local BPAD      = 10
 
-        local lines   = math.max(1, math.ceil(#text / 52))
-        local bubbleH = 20 + lines * 16 + BPAD * 2
+        local lines   = math.max(1, math.ceil(#text / 38))
+        local bubbleH = 22 + lines * 22 + BPAD * 2
 
         local row = vgui.Create("DPanel", list)
         row:SetTall(bubbleH + 22)
@@ -399,32 +399,32 @@ function NexusAdmin.OpenTicketChat(ticket)
             draw.RoundedBox(8, bx, 18, bw, bubbleH, bubbleCol)
             T.DrawBorder(bx, 18, bw, bubbleH, borderCol, 8)
 
-            draw.SimpleText(senderName, T.Fonts.Small,
-                bx + 10, 4, nameCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-            draw.SimpleText(timeStr, T.Fonts.Small,
-                bx + bw - 6, 4, Color(55, 70, 90),
+            draw.SimpleText(senderName, T.Fonts.Nexus_Small,
+                bx + 10, 2, nameCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText(timeStr, T.Fonts.Nexus_Small,
+                bx + bw - 6, 2, Color(55, 70, 90),
                 TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 
-            -- Automatischer Zeilenumbruch
+            -- Automatischer Zeilenumbruch (Medium-Font, 22px Zeilenabstand)
             local maxW  = bw - BPAD * 2
             local words = string.Explode(" ", text)
             local line  = ""
-            local lineY = 18 + BPAD
+            local lineY = 20 + BPAD
             for _, word in ipairs(words) do
                 local test = line == "" and word or (line .. " " .. word)
-                surface.SetFont(T.Fonts.Small)
+                surface.SetFont(T.Fonts.Medium)
                 local tw = surface.GetTextSize(test)
                 if tw > maxW and line ~= "" then
-                    draw.SimpleText(line, T.Fonts.Small,
+                    draw.SimpleText(line, T.Fonts.Medium,
                         bx + BPAD, lineY, textCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-                    lineY = lineY + 16
+                    lineY = lineY + 22
                     line  = word
                 else
                     line = test
                 end
             end
             if line ~= "" then
-                draw.SimpleText(line, T.Fonts.Small,
+                draw.SimpleText(line, T.Fonts.Medium,
                     bx + BPAD, lineY, textCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
             end
         end
@@ -445,8 +445,8 @@ function NexusAdmin.OpenTicketChat(ticket)
 
     local input = vgui.Create("DTextEntry", frame)
     input:SetPos(10, inputY)
-    input:SetSize(W - 86, INP_H - 6)
-    input:SetFont(T.Fonts.Body)
+    input:SetSize(W - 86, INP_H - 4)
+    input:SetFont(T.Fonts.Medium)
     input:SetMaximumCharCount(300)
     input:SetEnabled(not isClosed)
     input:SetPlaceholderText(isClosed and "Ticket geschlossen." or "Nachricht eingeben…")
@@ -472,7 +472,7 @@ function NexusAdmin.OpenTicketChat(ticket)
 
     local sendBtn = vgui.Create("DButton", frame)
     sendBtn:SetPos(W - 72, inputY)
-    sendBtn:SetSize(62, INP_H - 6)
+    sendBtn:SetSize(62, INP_H - 4)
     sendBtn:SetText("")
     sendBtn._hv = 0
     sendBtn.Paint = function(self, w, h)
@@ -482,7 +482,7 @@ function NexusAdmin.OpenTicketChat(ticket)
             Color(0, 210, 255, math.floor(Lerp(self._hv, 40, 90))))
         T.DrawBorder(0, 0, w, h,
             Color(0, 210, 255, math.floor(Lerp(self._hv, 70, 160))), 8)
-        draw.SimpleText("▶", T.Fonts.Body, w * 0.5, h * 0.5,
+        draw.SimpleText("▶", T.Fonts.Medium, w * 0.5, h * 0.5,
             Color(0, 210, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     end
     sendBtn.DoClick = DoSend

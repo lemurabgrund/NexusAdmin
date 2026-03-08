@@ -48,6 +48,10 @@ NexusAdmin.Theme = {
         Small   = "NA_Font_Small",
         Mono    = "NA_Font_Mono",
         TitleLg = "NA_Font_TitleLg",
+        -- Neue lesbare Schriftarten
+        Large   = "NA_Font_Large",    -- 28px / 800  – Titel, Namen
+        Medium  = "NA_Font_Medium",   -- 18px / 600  – Chat, Header
+        Nexus_Small = "NA_Font_NSmall",  -- 15px / 500  – Status, Ping
     },
 
     -- ── Animation-Konstanten ──────────────────────────────────
@@ -79,15 +83,37 @@ surface.CreateFont("NA_Font_Title", {
 
 surface.CreateFont("NA_Font_Body", {
     font      = "Roboto",
-    size      = 14,
-    weight    = 400,
+    size      = 16,
+    weight    = 500,
     antialias = true,
 })
 
 surface.CreateFont("NA_Font_Small", {
     font      = "Roboto",
-    size      = 11,
+    size      = 13,
     weight    = 400,
+    antialias = true,
+})
+
+-- ── Nexus-UI Schriftfamilie (lesbar auf großen Monitors) ──────
+surface.CreateFont("NA_Font_Large", {
+    font      = "Roboto",
+    size      = 28,
+    weight    = 800,
+    antialias = true,
+})
+
+surface.CreateFont("NA_Font_Medium", {
+    font      = "Roboto",
+    size      = 18,
+    weight    = 600,
+    antialias = true,
+})
+
+surface.CreateFont("NA_Font_NSmall", {
+    font      = "Roboto",
+    size      = 15,
+    weight    = 500,
     antialias = true,
 })
 

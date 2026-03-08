@@ -19,29 +19,29 @@ surface.CreateFont("NA_SB_Title", {
 
 surface.CreateFont("NA_SB_Header", {
     font      = "Trebuchet MS",
-    size      = 14,
+    size      = 18,
     weight    = 700,
     antialias = true,
 })
 
 surface.CreateFont("NA_SB_Name", {
     font      = "Trebuchet MS",
-    size      = 16,
-    weight    = 600,
+    size      = 22,
+    weight    = 700,
     antialias = true,
 })
 
 surface.CreateFont("NA_SB_Sub", {
     font      = "Trebuchet MS",
-    size      = 12,
+    size      = 13,
     weight    = 400,
     antialias = true,
 })
 
 surface.CreateFont("NA_SB_Ping", {
     font      = "Trebuchet MS",
-    size      = 15,
-    weight    = 600,
+    size      = 17,
+    weight    = 700,
     antialias = true,
 })
 
@@ -49,8 +49,8 @@ surface.CreateFont("NA_SB_Ping", {
 local SB_W      = math.floor(ScrW() * 0.60)
 local SB_H      = math.floor(ScrH() * 0.75)
 local HEADER_H  = 70    -- Header-Bereich oben
-local COLHDR_H  = 30    -- Spalten-Beschriftungszeile
-local CARD_H    = 58    -- Höhe einer Spieler-Karte
+local COLHDR_H  = 34    -- Spalten-Beschriftungszeile
+local CARD_H    = 66    -- Höhe einer Spieler-Karte
 local CARD_PAD  = 5     -- Abstand zwischen Karten
 local AV_SIZE   = 36    -- Avatar-Bildgröße
 local AV_PAD    = 12    -- Linker Abstand des Avatars
@@ -220,12 +220,12 @@ function NexusAdmin.OpenScoreboard()
 
                 -- ── Name ──
                 draw.SimpleText(ply:Nick(), "NA_SB_Name",
-                    COL_NAME, math.floor(h * 0.5) - 9,
+                    COL_NAME, math.floor(h * 0.5) - 10,
                     Color(220, 235, 248), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
                 -- ── SteamID ──
                 draw.SimpleText(ply:SteamID(), "NA_SB_Sub",
-                    COL_NAME, math.floor(h * 0.5) + 11,
+                    COL_NAME, math.floor(h * 0.5) + 14,
                     Color(48, 68, 92), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
                 -- ── Rang-Pill ──
