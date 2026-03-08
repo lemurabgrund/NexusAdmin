@@ -1,0 +1,11 @@
+{
+    "title": "NexusAdmin",
+    "description": "Modernes, modulares Administrations-System für Garry's Mod.",
+    "type": "gamemode",
+    "tags": ["admin", "administration"],
+    "ignore": [
+        "*.psd",
+        "*.vcproj",
+        "*.svn"
+    ]
+}
