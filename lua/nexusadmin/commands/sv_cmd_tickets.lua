@@ -92,7 +92,7 @@ NexusAdmin.Commands["ticket"].callback = function(caller, args)
     table.sort(list, function(a, b) return a.createdAt > b.createdAt end)
 
     for _, ply in ipairs(player.GetAll()) do
-        if not IsValid(ply) or not ply:IsAdmin() then continue end
+        if not IsValid(ply) or not NexusAdmin.PlayerHasPermission(ply, "kick") then continue end
         net.Start("NexusAdmin_TicketList")
             net.WriteUInt(#list, 16)
             for _, t in ipairs(list) do

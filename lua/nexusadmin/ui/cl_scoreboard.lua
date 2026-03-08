@@ -147,6 +147,7 @@ function NexusAdmin.OpenScoreboard()
     local scroll = vgui.Create("DScrollPanel", frame)
     scroll:SetPos(10, scrollTop)
     scroll:SetSize(SB_W - 20, SB_H - scrollTop - 8)
+    scroll.Paint = function() end  -- kein Standard-Grau-Hintergrund
 
     local sbar = scroll:GetVBar()
     sbar:SetWide(4)

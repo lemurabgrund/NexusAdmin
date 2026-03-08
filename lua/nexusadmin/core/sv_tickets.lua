@@ -18,6 +18,7 @@ util.AddNetworkString("NexusAdmin_TicketClose")
 util.AddNetworkString("NexusAdmin_TicketMessage")
 util.AddNetworkString("NexusAdmin_RequestTicketMessages")
 util.AddNetworkString("NexusAdmin_TicketMessages")
+util.AddNetworkString("NexusAdmin_MyTicketUpdate")
 util.AddNetworkString("NexusAdmin_RequestBanList")
 util.AddNetworkString("NexusAdmin_BanList")
 util.AddNetworkString("NexusAdmin_RequestWarnList")
@@ -26,6 +27,19 @@ util.AddNetworkString("NexusAdmin_WarnList")
 -- Ticket-Speicher (Session-Daten, kein Persist nötig)
 NexusAdmin._Tickets        = NexusAdmin._Tickets        or {}
 NexusAdmin._TicketCounter  = NexusAdmin._TicketCounter  or 0
+
+-- ── Hilfsfunktion: Ticket-Status an Autor senden ─────────────
+local function SendAuthorUpdate(t)
+    local author = player.GetBySteamID64(t.authorSid)
+    if not IsValid(author) then return end
+    net.Start("NexusAdmin_MyTicketUpdate")
+        net.WriteUInt(t.id,           16)
+        net.WriteString(t.status)
+        net.WriteString(t.reason)
+        net.WriteString(t.authorSid)
+        net.WriteString(t.authorName)
+    net.Send(author)
+end
 
 -- ── Hilfsfunktion: Ticket-Liste an alle Admins senden ────────
 local function BroadcastTickets(target)
@@ -102,6 +116,7 @@ net.Receive("NexusAdmin_TicketCreate", function(_, ply)
     NexusAdmin.Log(string.format("TICKET #%d von %s (%s): %s",
         id, ply:Nick(), ply:SteamID64(), reason), "TICKET")
 
+    SendAuthorUpdate(NexusAdmin._Tickets[id])
     BroadcastTickets()
 end)
 
@@ -133,6 +148,7 @@ net.Receive("NexusAdmin_TicketAccept", function(_, ply)
     end
 
     NexusAdmin.Log(string.format("TICKET #%d angenommen von %s", id, ply:Nick()), "TICKET")
+    SendAuthorUpdate(t)
     BroadcastTickets()
 end)
 
@@ -158,6 +174,7 @@ net.Receive("NexusAdmin_TicketClose", function(_, ply)
     NexusAdmin.Log(string.format("TICKET #%d geschlossen von %s. Grund: %s",
         id, ply:Nick(), reason ~= "" and reason or "–"), "TICKET")
 
+    SendAuthorUpdate(t)
     BroadcastTickets()
 end)
 
