@@ -15,6 +15,9 @@ util.AddNetworkString("NexusAdmin_TicketCreate")
 util.AddNetworkString("NexusAdmin_TicketList")
 util.AddNetworkString("NexusAdmin_TicketAccept")
 util.AddNetworkString("NexusAdmin_TicketClose")
+util.AddNetworkString("NexusAdmin_TicketMessage")
+util.AddNetworkString("NexusAdmin_RequestTicketMessages")
+util.AddNetworkString("NexusAdmin_TicketMessages")
 util.AddNetworkString("NexusAdmin_RequestBanList")
 util.AddNetworkString("NexusAdmin_BanList")
 util.AddNetworkString("NexusAdmin_RequestWarnList")
@@ -156,6 +159,82 @@ net.Receive("NexusAdmin_TicketClose", function(_, ply)
         id, ply:Nick(), reason ~= "" and reason or "–"), "TICKET")
 
     BroadcastTickets()
+end)
+
+-- ── Ticket-Chat: Nachricht senden ────────────────────────────
+net.Receive("NexusAdmin_TicketMessage", function(_, ply)
+    if not IsValid(ply) then return end
+
+    local id   = net.ReadUInt(16)
+    local text = net.ReadString():Trim()
+    if text == "" or #text > 300 then return end
+
+    local t = NexusAdmin._Tickets[id]
+    if not t or t.status == "closed" then return end
+
+    local isAdmin  = NexusAdmin.PlayerHasPermission(ply, "kick")
+    local isAuthor = (ply:SteamID64() == t.authorSid)
+    if not isAdmin and not isAuthor then return end
+
+    t.messages = t.messages or {}
+    local msg = {
+        senderName = ply:Nick(),
+        senderSid  = ply:SteamID64(),
+        text       = text,
+        time       = os.time(),
+        isAdmin    = isAdmin,
+    }
+    t.messages[#t.messages + 1] = msg
+
+    -- Relay an Ticket-Autor + alle Admins
+    local recipients = {}
+    local author = player.GetBySteamID64(t.authorSid)
+    if IsValid(author) then
+        recipients[#recipients + 1] = author
+    end
+    for _, p in ipairs(player.GetAll()) do
+        if NexusAdmin.PlayerHasPermission(p, "kick") and p ~= author then
+            recipients[#recipients + 1] = p
+        end
+    end
+
+    net.Start("NexusAdmin_TicketMessage")
+        net.WriteUInt(id,            16)
+        net.WriteString(msg.senderName)
+        net.WriteString(msg.senderSid)
+        net.WriteString(msg.text)
+        net.WriteDouble(msg.time)
+        net.WriteBool(msg.isAdmin)
+    net.Send(recipients)
+
+    NexusAdmin.Log(string.format("TICKET #%d Nachricht von %s: %s",
+        id, ply:Nick(), text), "TICKET")
+end)
+
+-- ── Ticket-Chat: Nachrichtenhistorie anfordern ────────────────
+net.Receive("NexusAdmin_RequestTicketMessages", function(_, ply)
+    if not IsValid(ply) then return end
+
+    local id = net.ReadUInt(16)
+    local t  = NexusAdmin._Tickets[id]
+    if not t then return end
+
+    local isAdmin  = NexusAdmin.PlayerHasPermission(ply, "kick")
+    local isAuthor = (ply:SteamID64() == t.authorSid)
+    if not isAdmin and not isAuthor then return end
+
+    local msgs = t.messages or {}
+    net.Start("NexusAdmin_TicketMessages")
+        net.WriteUInt(id, 16)
+        net.WriteUInt(#msgs, 16)
+        for _, m in ipairs(msgs) do
+            net.WriteString(m.senderName)
+            net.WriteString(m.senderSid)
+            net.WriteString(m.text)
+            net.WriteDouble(m.time)
+            net.WriteBool(m.isAdmin)
+        end
+    net.Send(ply)
 end)
 
 -- ── Admin-Zentrale: Ban-Liste anfordern ───────────────────────

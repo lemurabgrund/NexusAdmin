@@ -3,7 +3,7 @@
 --  Custom Scoreboard – ersetzt das GMod-Standard-Scoreboard.
 --
 --  Layout:  Header · Spalten-Header · Spieler-Karten (Scroll)
---  Karten:  Avatar · Name + SteamID · Rang-Pill · Warn-Badge · Ping
+--  Karten:  Avatar · Name + SteamID · Rang-Pill · Ping
 --  Rechtsklick-Menü für Admins (nur auf andere Spieler)
 -- ============================================================
 
@@ -55,8 +55,7 @@ local CARD_PAD  = 5     -- Abstand zwischen Karten
 local AV_SIZE   = 36    -- Avatar-Bildgröße
 local AV_PAD    = 12    -- Linker Abstand des Avatars
 local COL_NAME  = AV_PAD + AV_SIZE + 10   -- X-Anfang Name-Spalte
-local COL_RANK  = 0.55  -- Rang-Spalte (Anteil der Kartenbreite)
-local COL_WARN  = 0.75  -- Warns-Spalte
+local COL_RANK  = 0.62  -- Rang-Spalte (Anteil der Kartenbreite)
 local COL_PING  = 1.00  -- Ping (rechtsbündig, -10px)
 
 -- ── Scoreboard öffnen ─────────────────────────────────────────
@@ -139,8 +138,6 @@ function NexusAdmin.OpenScoreboard()
             COL_NAME, h * 0.5, lc, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
         draw.SimpleText("RANG", "NA_SB_Header",
             w * COL_RANK, h * 0.5, lc, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-        draw.SimpleText("WARNS", "NA_SB_Header",
-            w * COL_WARN, h * 0.5, lc, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
         draw.SimpleText("PING", "NA_SB_Header",
             w - 10, h * 0.5, lc, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
     end
@@ -186,8 +183,6 @@ function NexusAdmin.OpenScoreboard()
             local rankData  = NexusAdmin.Ranks[rankId] or NexusAdmin.Ranks["user"] or {}
             local rankCol   = rankData.color or Color(90, 110, 135)
             local rankName  = rankData.name  or "User"
-            local warns     = ply:GetNWInt("na_warns", 0)
-            local threshold = NexusAdmin.Config.WarnThreshold or 4
 
             local card = vgui.Create("DPanel", scroll)
             card:SetSize(scroll:GetWide() - 6, CARD_H)
@@ -247,25 +242,6 @@ function NexusAdmin.OpenScoreboard()
                 draw.SimpleText(rankName, "NA_SB_Sub",
                     pillX + pillW * 0.5 + 2, math.floor(h * 0.5),
                     rankCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-
-                -- ── Warn-Badge ──
-                local warnX = math.floor(w * COL_WARN)
-                if warns > 0 then
-                    local wc     = warns >= threshold
-                                   and Color(255, 50, 80)
-                                    or Color(255, 200, 40)
-                    local bW, bH = 32, 20
-                    local bY     = math.floor(h * 0.5 - bH * 0.5)
-
-                    draw.RoundedBox(bH * 0.5, warnX, bY, bW, bH, wc)
-                    draw.SimpleText(tostring(warns), "NA_SB_Sub",
-                        warnX + bW * 0.5, math.floor(h * 0.5),
-                        Color(10, 10, 16), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-                else
-                    draw.SimpleText("—", "NA_SB_Sub",
-                        warnX + 16, math.floor(h * 0.5),
-                        Color(40, 55, 72), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-                end
 
                 -- ── Ping ──
                 local ping = ply:Ping()
