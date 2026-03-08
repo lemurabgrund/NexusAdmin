@@ -17,6 +17,11 @@ NexusAdmin._TicketCache      = {}
 NexusAdmin._TicketChatFrames = {}   -- [ticketId] = DPanel-Referenz
 NexusAdmin._MyTicket         = nil  -- Eigenes aktives Ticket {id,status,...}
 
+-- ── Server triggert Client, das Ticket-Fenster zu öffnen ──────
+net.Receive("NexusAdmin_OpenTicket", function()
+    NexusAdmin.OpenMyTicket()
+end)
+
 -- ── Eigenes Ticket vom Server erhalten ───────────────────────
 net.Receive("NexusAdmin_MyTicketUpdate", function()
     local id         = net.ReadUInt(16)
@@ -425,7 +430,8 @@ function NexusAdmin.OpenTicketChat(ticket)
         end
         row:SetMouseInputEnabled(false)
 
-        -- Auto-scroll nach unten
+        -- Sound-Feedback + Auto-scroll
+        surface.PlaySound("buttons/blip1.wav")
         timer.Simple(0, function()
             if IsValid(scroll) then
                 scroll:GetVBar():SetScroll(scroll:GetVBar():GetMax())

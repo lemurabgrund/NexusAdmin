@@ -19,6 +19,7 @@ util.AddNetworkString("NexusAdmin_TicketMessage")
 util.AddNetworkString("NexusAdmin_RequestTicketMessages")
 util.AddNetworkString("NexusAdmin_TicketMessages")
 util.AddNetworkString("NexusAdmin_MyTicketUpdate")
+util.AddNetworkString("NexusAdmin_OpenTicket")
 util.AddNetworkString("NexusAdmin_RequestBanList")
 util.AddNetworkString("NexusAdmin_BanList")
 util.AddNetworkString("NexusAdmin_RequestWarnList")
@@ -40,6 +41,7 @@ local function SendAuthorUpdate(t)
         net.WriteString(t.authorName)
     net.Send(author)
 end
+NexusAdmin.SendAuthorUpdate = SendAuthorUpdate  -- für sv_cmd_tickets zugänglich
 
 -- ── Hilfsfunktion: Ticket-Liste an alle Admins senden ────────
 local function BroadcastTickets(target)

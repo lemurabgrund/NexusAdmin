@@ -37,10 +37,19 @@ NexusAdmin.RegisterCommand("ticket", {
 -- Der obige Loopback-Trick klappt in GMod nicht (net an sich selbst).
 -- Daher rufen wir die Ticket-Logik direkt inline auf:
 NexusAdmin.Commands["ticket"].callback = function(caller, args)
+    -- Kein Argument: bestehendes Ticket-Fenster auf Client öffnen
     if #args == 0 or not args[1] or args[1] == "" then
-        NexusAdmin.SendNotify(caller, {
-            text = "Nutzung: !ticket <Grund>", icon = "error", duration = 4,
-        })
+        -- Prüfe ob Caller ein aktives Ticket hat
+        for _, t in pairs(NexusAdmin._Tickets or {}) do
+            if t.authorSid == caller:SteamID64() and t.status ~= "closed" then
+                net.Start("NexusAdmin_OpenTicket")
+                net.Send(caller)
+                return
+            end
+        end
+        -- Kein aktives Ticket → Formular öffnen
+        net.Start("NexusAdmin_OpenTicket")
+        net.Send(caller)
         return
     end
 
@@ -54,6 +63,9 @@ NexusAdmin.Commands["ticket"].callback = function(caller, args)
                 text = "Du hast bereits ein offenes Ticket (#" .. t.id .. ").",
                 icon = "warning", duration = 4,
             })
+            -- Trotzdem Fenster öffnen
+            net.Start("NexusAdmin_OpenTicket")
+            net.Send(caller)
             return
         end
     end
@@ -86,6 +98,11 @@ NexusAdmin.Commands["ticket"].callback = function(caller, args)
     NexusAdmin.Log(string.format("TICKET #%d von %s (%s): %s",
         id, caller:Nick(), caller:SteamID64(), reason), "TICKET")
 
+    -- Autor-Update senden (HUD + _MyTicket)
+    if NexusAdmin.SendAuthorUpdate then
+        NexusAdmin.SendAuthorUpdate(NexusAdmin._Tickets[id])
+    end
+
     -- Broadcast an alle Admins
     local list = {}
     for _, t in pairs(NexusAdmin._Tickets) do list[#list + 1] = t end
@@ -106,6 +123,10 @@ NexusAdmin.Commands["ticket"].callback = function(caller, args)
             end
         net.Send(ply)
     end
+
+    -- Chat-Fenster auf Client öffnen (MyTicket wurde gerade gesetzt via SendAuthorUpdate)
+    net.Start("NexusAdmin_OpenTicket")
+    net.Send(caller)
 end
 
 -- ── !tickets ─────────────────────────────────────────────────
