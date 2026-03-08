@@ -6,6 +6,7 @@ The Ideas are written by me and Claude executes them.
 
 ## Features
 
+- ** THIS PLUGIN IS IN EARLY DEVELOPMENT. USE IT AT YOUR OWN RISK.**
 - **Rank System** — Hierarchical ranks (`user`, `admin`, `superadmin`) with permission inheritance
 - **Command System** — Chat-based commands (`!kick`, `!ban`, `!freeze`, `!setrank`, etc.) with argument parsing
 - **Ticket System** — Players create support tickets; admins manage them via the Admin-Zentrale UI
