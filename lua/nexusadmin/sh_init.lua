@@ -65,6 +65,7 @@ local moduleOrder = {
     "nexusadmin/core/sv_darkrp.lua",      -- DarkRP-Integration (lädt via Initialize-Hook)
     "nexusadmin/ui/cl_permaprops.lua",    -- PermaProp C-Menü + Liste
     "nexusadmin/ui/cl_config_ui.lua",     -- Hybrid-Config-UI
+    "nexusadmin/ui/cl_rules.lua",         -- F1-Regel-Menü
 }
 
 -- Lade alle Kern-Module

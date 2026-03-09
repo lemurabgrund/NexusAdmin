@@ -39,4 +39,17 @@ NexusAdmin.Config = {
 
     -- Net-Message-Name für Warn-Count-Sync (Client → Spielerliste)
     WarnNetMessage = "NexusAdmin_SyncWarnCount",
+
+    -- ── Server-Regeln (F1-Menü) ───────────────────────────────
+    -- Diese Liste kann beliebig erweitert werden.
+    -- Jeder Eintrag erscheint als eigene Box im Regel-Fenster.
+    Rules = {
+        "Kein RDM (Random Deathmatch) – töte nur mit Roleplay-Grund.",
+        "Kein NLR (New Life Rule) – nach dem Tod kein sofortiges Zurückkehren.",
+        "Respektiere alle Spieler und Admins.",
+        "Kein FailRP – spiele realistisch entsprechend deiner Rolle.",
+        "Keine Cheats, Exploits oder Hacks.",
+        "Englisch oder Deutsch im globalen Chat.",
+        "Admins haben das letzte Wort – Entscheidungen sind zu akzeptieren.",
+    },
 }
