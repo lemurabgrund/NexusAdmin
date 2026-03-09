@@ -448,6 +448,7 @@ function NexusAdmin.OpenTicketChat(ticket)
     input:SetSize(W - 86, INP_H - 4)
     input:SetFont(T.Fonts.Medium)
     input:SetMaximumCharCount(300)
+    input:SetAllowNonAsciiCharacters(true)
     input:SetEnabled(not isClosed)
     input:SetPlaceholderText(isClosed and "Ticket geschlossen." or "Nachricht eingeben…")
     input.Paint = function(self, w, h)
@@ -573,3 +574,10 @@ function NexusAdmin.OpenTicketCreate()
         frame:Remove()
     end)
 end
+
+-- ── F4-Keybind: Ticket-Fenster öffnen ────────────────────────
+hook.Add("PlayerButtonDown", "NexusAdmin_TicketKey", function(ply, btn)
+    if ply ~= LocalPlayer() then return end
+    if btn ~= KEY_F4 then return end
+    NexusAdmin.OpenMyTicket()
+end)

@@ -19,14 +19,14 @@ surface.CreateFont("NA_SB_Title", {
 
 surface.CreateFont("NA_SB_Header", {
     font      = "Trebuchet MS",
-    size      = 18,
-    weight    = 700,
+    size      = 22,
+    weight    = 600,
     antialias = true,
 })
 
 surface.CreateFont("NA_SB_Name", {
     font      = "Trebuchet MS",
-    size      = 22,
+    size      = 24,
     weight    = 700,
     antialias = true,
 })
@@ -40,8 +40,8 @@ surface.CreateFont("NA_SB_Sub", {
 
 surface.CreateFont("NA_SB_Ping", {
     font      = "Trebuchet MS",
-    size      = 17,
-    weight    = 700,
+    size      = 20,
+    weight    = 500,
     antialias = true,
 })
 
@@ -49,8 +49,8 @@ surface.CreateFont("NA_SB_Ping", {
 local SB_W      = math.floor(ScrW() * 0.60)
 local SB_H      = math.floor(ScrH() * 0.75)
 local HEADER_H  = 70    -- Header-Bereich oben
-local COLHDR_H  = 34    -- Spalten-Beschriftungszeile
-local CARD_H    = 66    -- Höhe einer Spieler-Karte
+local COLHDR_H  = 38    -- Spalten-Beschriftungszeile
+local CARD_H    = 72    -- Höhe einer Spieler-Karte
 local CARD_PAD  = 5     -- Abstand zwischen Karten
 local AV_SIZE   = 36    -- Avatar-Bildgröße
 local AV_PAD    = 12    -- Linker Abstand des Avatars
